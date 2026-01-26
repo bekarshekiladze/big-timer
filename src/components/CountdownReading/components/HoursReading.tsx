@@ -1,5 +1,4 @@
-export default function HoursReading() {
-  return (
-    <div>3</div>
-  )
+
+export default function HoursReading({ value }: { value: string | null }) {
+  return <div>{value}</div>;
 }

@@ -1,5 +1,4 @@
-export default function SecondsReading() {
-  return (
-    <div>51</div>
-  )
+
+export default function SecondsReading({ value }: { value: string }) {
+  return <div>{value}</div>;
 }

@@ -1,5 +1,4 @@
-export default function MinutesReading() {
-  return (
-    <div>09</div>
-  )
+
+export default function MinutesReading({ value }: { value: string }) {
+  return <div>{value}</div>;
 }

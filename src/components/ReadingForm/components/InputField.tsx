@@ -22,7 +22,7 @@ export default function InputField({ name, defaultValue, selected }: InputFieldP
   return (
     <label className="input-group">
       <input
-        // onMouseDown={handleMouseDown}
+        onMouseDown={handleMouseDown}
         ref={inputRef}
         name={name}
         type="text"
