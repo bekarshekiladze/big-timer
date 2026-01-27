@@ -75,6 +75,8 @@
   transform: scale(1.1)
 }
 
+
+
 .primary-button {
   background-color: var(--color-bigtimer-yellow);
   background: linear-gradient(#ffd21f, #ffd21f 40%, #fc0 55%, #fc0);

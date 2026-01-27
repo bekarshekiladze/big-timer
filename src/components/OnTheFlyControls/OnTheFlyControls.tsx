@@ -1,10 +1,15 @@
-import { GrAdd } from "react-icons/gr";
-import { GrSubtract } from "react-icons/gr";
-
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 
 export default function OnTheFlyControls() {
-  return <div className="buttons-container">
-    <button className="place-content-center grid round button primary-button"><GrAdd /></button>
-    <button className="place-content-center grid round button primary-button"><GrSubtract /></button>
-  </div>;
+  return (
+    <div className="text-bigtimer-black buttons-container">
+      <button className="place-content-center grid round button primary-button">
+        <FaPlus />
+      </button>
+      <button className="place-content-center grid round button primary-button">
+        <FaMinus />
+      </button>
+    </div>
+  );
 }

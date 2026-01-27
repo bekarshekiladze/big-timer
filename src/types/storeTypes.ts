@@ -6,17 +6,30 @@ export type TimerSettings = {
   repeat: boolean;
   showNotifications: boolean;
   warningWhenTimeIsAlmostUp: boolean;
-}
+};
 
-
-
+export type SelectedInputGroup = "hours" | "minutes" | "seconds";
 
 export type TimerState = {
+  start: () => void;
+  pause: () => void;
   timerIsRunning: boolean;
+  setIsRunning: (running: boolean) => void;
+  targetDate: number | null;
+
+  timerHasStarted: boolean;
+  setHasStarted: (started: boolean) => void;
+
+  timerIsFinished: boolean;
+  setFinished: (finished: boolean) => void;
+
   previouslySetDuration: number | null;
 
   isEditing: boolean;
   setIsEditing: (editing: boolean) => void;
+
+  selectedGroup: SelectedInputGroup;
+  setSelectedGroup: (group: SelectedInputGroup) => void;
 
   hours: number;
   minutes: number;
@@ -30,8 +43,8 @@ export type TimerState = {
   setTime: (h: number, m: number, s: number) => void;
   setRunning: (running: boolean) => void;
   setSettings: (settings: Partial<TimerSettings>) => void;
-  syncFromUrl: (params: URLSearchParams) => void;
-}
+  initializeTimer: (h: number, m: number, s: number, repeat?: boolean) => void;
+};
 
 export type TimeDisplayData = {
   hours: string | null;
@@ -39,4 +52,4 @@ export type TimeDisplayData = {
   seconds: string;
   showHoursSeparator: boolean;
   showMinutesSeparator: boolean;
-}
+};

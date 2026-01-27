@@ -1,17 +1,54 @@
-import { TimerState } from "@/types/storeTypes"
-import { create } from "zustand"
+import { TimerState } from "@/types/storeTypes";
+import { start } from "repl";
+import { create } from "zustand";
 
-export const useTimerStore = create<TimerState>(set => ({
-  timerIsRunning: true,
-  previouslySetDuration: null,
-
-  isEditing: false,
-  setIsEditing: (editing) => set({ isEditing: editing }),
-
+export const useTimerStore = create<TimerState>((set) => ({
+  // timer zone
+  timerIsRunning: false,
+  timerHasStarted: false,
+  timerIsFinished: false,
+  previouslySetDuration: null, //10 min default
+  targetDate: null,
   hours: 0,
   minutes: 0,
   seconds: 0,
 
+  setTime: (h, m, s) =>
+    set({ hours: h, minutes: m, seconds: s, timerIsFinished: false }),
+  start: () =>
+    set({
+      timerIsRunning: true,
+      timerHasStarted: true,
+      timerIsFinished: false,
+    }),
+  pause: () => set({ timerIsRunning: false }),
+  setFinished: (finished) => set({ timerIsFinished: finished }),
+  setHasStarted: (started) => set({ timerHasStarted: started }),
+  setIsRunning: (running) => set({ timerIsRunning: running }),
+  setRunning: (running) => set({ timerIsRunning: running }),
+  initializeTimer: (h: number, m: number, s: number, repeat?: boolean) =>
+    set((state) => ({
+      hours: h,
+      minutes: m,
+      seconds: s,
+      timerIsFinished: false,
+      settings: {
+        ...state.settings,
+        repeat: repeat ?? state.settings.repeat,
+      },
+    })),
+  // end of timer zone
+
+  // UI zone
+  isEditing: false,
+  isTimerLoading: true,
+  selectedGroup: "hours",
+  setIsEditing: (editing) => set({ isEditing: editing }),
+  setSelectedGroup: (group) => set({ selectedGroup: group }),
+  setIsTimerLoading: (loading) => set({ isTimerLoading: loading }),
+  // end of UI zone
+
+  // settings zone
   settings: {
     continueBeyondZero: false,
     playTimerCompleteSound: false,
@@ -19,25 +56,11 @@ export const useTimerStore = create<TimerState>(set => ({
     reducedMotion: true,
     repeat: false,
     showNotifications: false,
-    warningWhenTimeIsAlmostUp: false
+    warningWhenTimeIsAlmostUp: false,
   },
-
-  isTimerLoading: true,
-  setIsTimerLoading: (loading) => set({ isTimerLoading: loading }),
-
-  setTime: (h, m, s) => set({ hours: h, minutes: m, seconds: s }),
-  setRunning: (running) => set({ timerIsRunning: running }),
   setSettings: (settings) =>
-    set(state => ({
-      settings: { ...state.settings, ...settings }
+    set((state) => ({
+      settings: { ...state.settings, ...settings },
     })),
-  syncFromUrl: (params) => set(state => ({
-    hours: Number(params.get('hours')) || 0,
-    minutes: Number(params.get('minutes')) || 0,
-    seconds: Number(params.get('seconds')) || 0,
-    settings: {
-      ...state.settings,
-      repeat: params.get('repeat') === 'true'
-    }
-  }))
-}))
+  // end of settings zone
+}));

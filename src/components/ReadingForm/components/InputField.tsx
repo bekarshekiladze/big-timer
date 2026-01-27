@@ -1,26 +1,36 @@
-import { useEffect, useRef } from "react"
+import { useTimerStore } from "@/store/timerStore";
+import { SelectedInputGroup } from "@/types/storeTypes";
+import { useEffect, useRef } from "react";
 
 type InputFieldParams = {
-  name: string,
-  defaultValue: string,
-  selected: boolean
-}
+  name: string;
+  defaultValue: string;
+  selected?: boolean;
+};
 
-export default function InputField({ name, defaultValue, selected }: InputFieldParams) {
-  const inputRef = useRef<HTMLInputElement>(null)
+export default function InputField({ name, defaultValue }: InputFieldParams) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const selected = useTimerStore((state) => state.selectedGroup) === name;
+  const select = useTimerStore.getState().setSelectedGroup;
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   useEffect(() => {
     if (selected && inputRef.current) {
-      inputRef.current.select()
+      inputRef.current.select();
     }
-  }, [selected])
+  }, [selected]);
 
   return (
-    <label className="input-group">
+    <label
+      className="input-group"
+      onClick={() => {
+        select(name as SelectedInputGroup);
+      }}
+    >
       <input
         onMouseDown={handleMouseDown}
         ref={inputRef}

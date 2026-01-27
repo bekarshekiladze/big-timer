@@ -9,5 +9,5 @@ export default function CountdownContainer() {
       <Wrapper />
       <OnTheFlyControls />
     </div>
-  )
+  );
 }

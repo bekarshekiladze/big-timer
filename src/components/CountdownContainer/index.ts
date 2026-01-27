@@ -1,1 +1,1 @@
-export { default } from "./CountdownContainer"
+export { default } from "./CountdownContainer";
