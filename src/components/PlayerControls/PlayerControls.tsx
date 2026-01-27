@@ -2,10 +2,19 @@
 
 import { useTimerStore } from "@/store/timerStore";
 import { secondsToHMS } from "@/utils/timeConversions";
+import { animate, press } from "motion";
+import { useEffect } from "react";
 
 export default function PlayerControls() {
   const { start, pause, reset, setTime, previouslySetDuration } =
     useTimerStore();
+  useEffect(() => {
+    press(".primary-button", (element) => {
+      animate(element, { scale: 0.8 }, { type: "spring", stiffness: 1000 });
+      return () =>
+        animate(element, { scale: 1 }, { type: "spring", stiffness: 500 });
+    });
+  }, []);
 
   return (
     <div className="buttons-container">

@@ -5,7 +5,7 @@ import { ReadingForm } from "../ReadingForm";
 import { useTimerStore } from "@/store/timerStore";
 import { useInitializerTimer } from "@/hooks/useInitiazerTimer";
 import useTimerTicking from "@/hooks/useTimerTicking";
-import * as motion from "motion/react-client";
+import { motion } from "motion/react";
 
 export default function Wrapper() {
   const { isEditing, isTimerLoading } = useTimerStore();
@@ -14,7 +14,7 @@ export default function Wrapper() {
   useTimerTicking();
 
   if (isTimerLoading) {
-    return <div className="text-xl">Loading ...</div>;
+    return <div className="text-4xl">Loading ...</div>;
   }
 
   return (

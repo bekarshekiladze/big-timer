@@ -65,7 +65,7 @@
 .button {
   border-color: transparent;
   border-radius: 999px;
-  transition: var(--transition);
+  /* transition: var(--transition); */
   cursor: pointer;
   pointer-events: all;
   user-select: none;
@@ -110,8 +110,8 @@
 
 @media screen and (min-width: 768px) {
   .nav-items {
-  gap: 1.5rem
-}
+    gap: 1.5rem
+  }
 
   .nav-item {
     font-size: 1.5rem
