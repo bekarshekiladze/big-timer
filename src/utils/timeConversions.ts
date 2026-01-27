@@ -48,3 +48,13 @@ export function hmsToSeconds(
 
   return total;
 }
+
+export const msToHMS = (ms: number) => {
+  const totalSeconds = Math.floor(ms / 1000);
+
+  return {
+    hours: Math.floor(totalSeconds / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: totalSeconds % 60,
+  };
+};

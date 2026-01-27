@@ -1,5 +1,5 @@
 import { DEFAULT_DURATION, STORAGE_KEY } from "@/constants/times";
-import { hmsToSeconds, secondsToHMS } from "./timeConversions";
+import { hmsToSeconds } from "./timeConversions";
 
 export function buildTimerSearchParams(
   hours: number,

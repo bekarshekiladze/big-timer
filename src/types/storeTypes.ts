@@ -13,9 +13,12 @@ export type SelectedInputGroup = "hours" | "minutes" | "seconds";
 export type TimerState = {
   start: () => void;
   pause: () => void;
+  reset: () => void;
+  pausedAt: null | number;
   timerIsRunning: boolean;
   setIsRunning: (running: boolean) => void;
   targetDate: number | null;
+  setTargetDate: (date: number) => void;
 
   timerHasStarted: boolean;
   setHasStarted: (started: boolean) => void;
@@ -30,6 +33,7 @@ export type TimerState = {
 
   selectedGroup: SelectedInputGroup;
   setSelectedGroup: (group: SelectedInputGroup) => void;
+  setPreviouslySetDuration: (value: number) => void;
 
   hours: number;
   minutes: number;
@@ -41,10 +45,9 @@ export type TimerState = {
   setIsTimerLoading: (loading: boolean) => void;
 
   setTime: (h: number, m: number, s: number) => void;
-  setRunning: (running: boolean) => void;
   setSettings: (settings: Partial<TimerSettings>) => void;
   initializeTimer: (h: number, m: number, s: number, repeat?: boolean) => void;
-  syncTimer: (h: number, m: number, s: number) => void;
+  syncTimer: (h: number, m: number, s: number, duration: number) => void;
 };
 
 export type TimeDisplayData = {

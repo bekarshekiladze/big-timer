@@ -1,3 +1,6 @@
+"use client";
+
+import { useTimerStore } from "@/store/timerStore";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 

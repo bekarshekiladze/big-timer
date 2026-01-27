@@ -8,10 +8,12 @@ export function useInitializerTimer() {
 
   useEffect(() => {
     const duration = getResolvedDuration();
+
     const hmr = secondsToHMS(duration);
+    
 
     if (hmr) {
-      syncTimer(hmr.hours, hmr.minutes, hmr.seconds);
+      syncTimer(hmr.hours, hmr.minutes, hmr.seconds, duration);
 
       const params = buildTimerSearchParams(
         hmr.hours,

@@ -1,31 +1,66 @@
 import { TimerState } from "@/types/storeTypes";
-import { start } from "repl";
 import { create } from "zustand";
 
 export const useTimerStore = create<TimerState>((set) => ({
-  // timer zone
+  // TIMERS ZONE
   timerIsRunning: false,
   timerHasStarted: false,
   timerIsFinished: false,
   previouslySetDuration: null, //10 min default
   targetDate: null,
+  pausedAt: null,
   hours: 0,
   minutes: 0,
   seconds: 0,
 
+  setPreviouslySetDuration: (value) => {
+    set((state) => {
+      if (!state.previouslySetDuration) return state;
+      return { previouslySetDuration: state.previouslySetDuration + value };
+    });
+  },
   setTime: (h, m, s) =>
     set({ hours: h, minutes: m, seconds: s, timerIsFinished: false }),
   start: () =>
-    set({
-      timerIsRunning: true,
-      timerHasStarted: true,
-      timerIsFinished: false,
+    set((state) => {
+      if (state.timerIsRunning) return state;
+
+      const pauseDuration = state.pausedAt ? Date.now() - state.pausedAt : 0;
+
+      return {
+        timerIsRunning: true,
+        timerHasStarted: true,
+        timerIsFinished: false,
+        targetDate: state.targetDate
+          ? state.targetDate + pauseDuration
+          : Date.now() + (state.previouslySetDuration ?? 0) * 1000,
+        pausedAt: null,
+      };
     }),
-  pause: () => set({ timerIsRunning: false }),
+  pause: () =>
+    set((state) => {
+      if (!state.timerIsRunning) return state;
+
+      return {
+        timerIsRunning: false,
+        pausedAt: Number(Date.now()),
+      };
+    }),
+  reset: () => {
+    set(() => {
+      return {
+        timerIsRunning: false,
+        timerHasStarted: false,
+        timerIsFinished: false,
+        targetDate: null,
+        pausedAt: null,
+      };
+    });
+  },
+  setTargetDate: (milliseconds) => set({ targetDate: milliseconds }),
   setFinished: (finished) => set({ timerIsFinished: finished }),
   setHasStarted: (started) => set({ timerHasStarted: started }),
   setIsRunning: (running) => set({ timerIsRunning: running }),
-  setRunning: (running) => set({ timerIsRunning: running }),
   initializeTimer: (h: number, m: number, s: number, repeat?: boolean) =>
     set((state) => ({
       hours: h,
@@ -37,22 +72,17 @@ export const useTimerStore = create<TimerState>((set) => ({
         repeat: repeat ?? state.settings.repeat,
       },
     })),
-  syncTimer: (h: number, m: number, s: number) => {
-    // Calculate targetDate if you want the timer to end 'X' seconds from now
-    const totalSeconds = h * 3600 + m * 60 + s;
-    const target = new Date();
-    target.setSeconds(target.getSeconds() + totalSeconds);
-
+  syncTimer: (h: number, m: number, s: number, duration: number) => {
     set({
       hours: h,
       minutes: m,
       seconds: s,
-      targetDate: Number(target),
+      previouslySetDuration: duration,
       timerIsFinished: false,
       isTimerLoading: false,
     });
   },
-  // end of timer zone
+  // end of TIMERS ZONE
 
   // UI zone
   isEditing: false,
