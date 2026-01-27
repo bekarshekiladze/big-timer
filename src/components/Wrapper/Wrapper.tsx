@@ -1,21 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
 import { CountdownReading } from "../CountdownReading";
 import { ReadingForm } from "../ReadingForm";
-import { initTimesFromStorageOrUrl } from "@/utils/timerSync";
 import { useTimerStore } from "@/store/timerStore";
+import { useInitializerTimer } from "@/hooks/useInitiazerTimer";
 
 export default function Wrapper() {
   const isEditing = useTimerStore((state) => state.isEditing);
 
-
-  useEffect(() => {
-    initTimesFromStorageOrUrl();
-    useTimerStore
-      .getState()
-      // .initializeTimer();
-  }, []);
+  useInitializerTimer();
 
   return (
     <div className="wrapper">

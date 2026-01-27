@@ -37,6 +37,21 @@ export const useTimerStore = create<TimerState>((set) => ({
         repeat: repeat ?? state.settings.repeat,
       },
     })),
+  syncTimer: (h: number, m: number, s: number) => {
+    // Calculate targetDate if you want the timer to end 'X' seconds from now
+    const totalSeconds = h * 3600 + m * 60 + s;
+    const target = new Date();
+    target.setSeconds(target.getSeconds() + totalSeconds);
+
+    set({
+      hours: h,
+      minutes: m,
+      seconds: s,
+      targetDate: Number(target),
+      timerIsFinished: false,
+      isTimerLoading: false,
+    });
+  },
   // end of timer zone
 
   // UI zone

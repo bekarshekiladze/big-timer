@@ -44,6 +44,7 @@ export type TimerState = {
   setRunning: (running: boolean) => void;
   setSettings: (settings: Partial<TimerSettings>) => void;
   initializeTimer: (h: number, m: number, s: number, repeat?: boolean) => void;
+  syncTimer: (h: number, m: number, s: number) => void;
 };
 
 export type TimeDisplayData = {

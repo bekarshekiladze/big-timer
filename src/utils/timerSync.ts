@@ -36,18 +36,3 @@ export function getResolvedDuration(): number {
   // fallback to default duration
   return DEFAULT_DURATION;
 }
-
-export function initTimesFromStorageOrUrl(): void {
-  const duration = getResolvedDuration();
-  const hmr = secondsToHMS(duration);
-
-  if (hmr) {
-    const params = buildTimerSearchParams(hmr.hours, hmr.minutes, hmr.seconds);
-    const newRelativePathQuery = `${window.location.pathname}?${params.toString()}`;
-
-    // Only update if the URL actually needs to change
-    if (window.location.search !== `?${params.toString()}`) {
-      window.history.replaceState(null, "", newRelativePathQuery);
-    }
-  }
-}
