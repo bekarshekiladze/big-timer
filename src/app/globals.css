@@ -93,3 +93,32 @@
   height: 3rem;
   width: 3rem;
 }
+
+/* ======= header ====== */
+.nav-items {
+  gap: 0.5rem
+}
+
+.nav-item {
+  font-size: 2rem
+}
+
+.nav-text {
+  display: none
+}
+
+
+@media screen and (min-width: 768px) {
+  .nav-items {
+  gap: 1.5rem
+}
+
+  .nav-item {
+    font-size: 1.5rem
+  }
+
+  .nav-text {
+    display: inline-block
+  }
+
+}

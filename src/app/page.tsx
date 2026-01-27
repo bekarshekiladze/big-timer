@@ -1,8 +1,10 @@
 import CountdownContainer from "@/components/CountdownContainer";
+import Header from "@/components/Header";
 
 function page() {
   return (
-    <main className="bg-black text-bigtimer-white min-h-screen  min-w-screen grid items-center">
+    <main className="relative items-center grid bg-black min-w-screen min-h-screen text-bigtimer-white">
+      <Header />
       <CountdownContainer />
     </main>
   );
