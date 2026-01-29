@@ -2,13 +2,19 @@ import { useTimerStore } from "@/store/timerStore";
 import { SelectedInputGroup } from "@/types/storeTypes";
 import { useEffect, useRef, useState } from "react";
 
-type InputFieldParams = {
-  name: string;
-  value: string;
-  selected?: boolean;
-};
+type Group = "hours" | "minutes" | "seconds";
 
-export default function InputField({ name, value }: InputFieldParams) {
+export default function InputField({
+  name,
+  value,
+  onChange,
+  onBlur,
+}: {
+  name: Group;
+  value: string;
+  onChange: (g: Group, raw: string) => void;
+  onBlur: (g: Group) => void;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const selected = useTimerStore((state) => state.selectedInputGroup) === name;
@@ -60,13 +66,13 @@ export default function InputField({ name, value }: InputFieldParams) {
       }}
     >
       <input
-        onMouseDown={handleMouseDown}
-        //readOnly // dont forget
+        // onMouseDown={handleMouseDown}
         ref={inputRef}
         name={name}
         type="text"
         inputMode="numeric"
         onKeyDown={handleKeyDown}
+        onChange={(e) => onChange(name, e.target.value)}
         pattern="[0-9]*"
         value={value}
         className={`outline-0 max-w-[2ch] text-right ${name} ${selected && "selection:text-white selection:bg-[#fdf2b3]"}`}
