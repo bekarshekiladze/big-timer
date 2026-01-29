@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useTimerStore } from "@/store/timerStore";
-import { formatTimeDisplay } from "@/utils/timeFormat";
 import { msToHMS } from "@/utils/timeConversions";
 import { onlyDigits } from "@/utils/inputControls/inputUx";
 import InputField from "./components/InputField";
@@ -16,6 +15,8 @@ export default function TimerForm() {
   const duration = useTimerStore((state) => state.duration);
   const applyTimes = useTimerStore((state) => state.applyTimes);
   const setIsEditing = useTimerStore((state) => state.setIsEditing);
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [draft, setDraft] = useState(() => {
     const { hours, minutes, seconds } = msToHMS(duration);
@@ -76,8 +77,6 @@ export default function TimerForm() {
     applyTimes(ms);
     setIsEditing(false);
   };
-
-  const formRef = useRef<HTMLFormElement>(null);
 
   return (
     <form ref={formRef} onSubmit={onSubmit}>
