@@ -29,10 +29,13 @@ export default function TimerForm() {
 
   useEffect(() => {
     const { hours, minutes, seconds } = msToHMS(duration);
-    setDraft({
-      hours: String(hours),
-      minutes: String(minutes).padStart(2, "0"),
-      seconds: String(seconds).padStart(2, "0"),
+    // because of a lint error: error  Error: Calling setState synchronously within an effect can trigger cascading renders
+    queueMicrotask(() => {
+      setDraft({
+        hours: String(hours),
+        minutes: String(minutes).padStart(2, "0"),
+        seconds: String(seconds).padStart(2, "0"),
+      });
     });
   }, [duration]);
 

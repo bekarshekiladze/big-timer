@@ -69,7 +69,7 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
   },
 
   increment: (ms) => {
-    const { isRunning, targetTime, remainingTime } = get();
+    const { isRunning, targetTime } = get();
 
     if (!isRunning || targetTime == null) {
       set((state) => {
@@ -83,10 +83,10 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
     const nextTarget = targetTime + ms;
 
     // running
-    set((state) => ({
+    set({
       targetTime: nextTarget,
       remainingTime: Math.max(0, nextTarget - now),
-    }));
+    });
   },
 
   decrement: (ms) => {
