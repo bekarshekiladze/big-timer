@@ -1,9 +1,18 @@
+import { SelectedInputGroup } from "@/types/storeTypes";
 import { TimerActions } from "../types/storeTypes";
 import { TimerState } from "@/types/storeTypes";
 import { create } from "zustand";
 
 const DEFAULT_DURATION = 10 * 60 * 1000;
 // const DEFAULT_DURATION = 5 * 1000;
+
+const GROUPS: SelectedInputGroup[] = ["hours", "minutes", "seconds"];
+
+const STEP_MS: Record<SelectedInputGroup, number> = {
+  hours: 60 * 60 * 1000,
+  minutes: 60 * 1000,
+  seconds: 1000,
+};
 
 export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
   // TIMER ZONE
@@ -135,6 +144,24 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
 
   setSelectedInputGroup: (group) => {
     set({ selectedInputGroup: group });
+  },
+  moveSelection: (dir: "left" | "right") => {
+    // ["hours", "minutes", "seconds"]
+    const { selectedInputGroup } = get();
+    const idx = GROUPS.indexOf(selectedInputGroup);
+    const nextIdx =
+      dir === "left"
+        ? (idx - 1 + GROUPS.length) % GROUPS.length
+        : (idx + 1) % GROUPS.length;
+
+    set({ selectedInputGroup: GROUPS[nextIdx] });
+  },
+  nudgeSelected: (dir: "up" | "down") => {
+    const { selectedInputGroup } = get();
+    const step = STEP_MS[selectedInputGroup];
+
+    if (dir === "up") get().increment(step);
+    else get().decrement(step);
   },
   // end of UI ZONE
 }));

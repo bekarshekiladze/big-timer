@@ -26,4 +26,6 @@ export type TimerActions = {
 
   // ui
   setSelectedInputGroup: (group: SelectedInputGroup) => void;
+  moveSelection: (dir: "left" | "right") => void;
+  nudgeSelected: (dir: "up" | "down") => void;
 };

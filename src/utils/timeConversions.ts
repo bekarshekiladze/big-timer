@@ -57,3 +57,6 @@ export function msToHMS(ms: number) {
   const seconds = totalSeconds % 60;
   return { hours, minutes, seconds };
 }
+
+export const hmsToMs = (h: number, m: number, s: number) =>
+  (h * 3600 + m * 60 + s) * 1000;
