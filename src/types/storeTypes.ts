@@ -1,11 +1,18 @@
 export type TimerState = {
+  // timer
   duration: number;
   targetTime: number | null;
   isRunning: boolean;
   remainingTime: number;
+
+  // ui
+  selectedInputGroup: SelectedInputGroup;
 };
 
+export type SelectedInputGroup = "hours" | "minutes" | "seconds";
+
 export type TimerActions = {
+  // timer
   start: () => void;
   pause: () => void;
   reset: () => void;
@@ -16,12 +23,7 @@ export type TimerActions = {
 
   setDuration: (ms: number) => void;
   applyTimes: (ms: number) => void;
-};
 
-export type TimeDisplayData = {
-  hours: string | null;
-  minutes: string;
-  seconds: string;
-  showHoursSeparator: boolean;
-  showMinutesSeparator: boolean;
+  // ui
+  setSelectedInputGroup: (group: SelectedInputGroup) => void;
 };

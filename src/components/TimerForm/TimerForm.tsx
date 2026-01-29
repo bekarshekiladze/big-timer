@@ -1,30 +1,29 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HourField, MinuteField, SecondField } from "./components";
-import { useClickOutside } from "@/hooks/useClickOutside";
 import { useTimerStore } from "@/store/timerStore";
 import { formatTimeDisplay } from "@/utils/timeFormat";
+import { msToHMS } from "@/utils/timeConversions";
 
-export default function ReadingForm() {
-  const { hours, minutes, seconds } = useTimerStore();
+export default function TimerForm() {
+  const duration = useTimerStore((state) => state.duration);
+  const applyTimes = useTimerStore((state) => state.applyTimes);
 
-  const {
-    hours: h,
-    minutes: m,
-    seconds: s,
-  } = formatTimeDisplay(hours, minutes, seconds);
+  useEffect(() => {
+    const { hours, minutes, seconds } = msToHMS(duration);
+  }, [duration]);
 
   const formRef = useRef<HTMLFormElement>(null);
-  const disableEditingMode = useTimerStore((state) => state.setIsEditing);
+  // const disableEditingMode = useTimerStore((state) => state.setIsEditing);
+  // useClickOutside(formRef, () => disableEditingMode(false));
 
-  useClickOutside(formRef, () => disableEditingMode(false));
   return (
     <form ref={formRef}>
       <fieldset className="flex justify-center gap-2 bg-white p-4 rounded-md font-bigtimer text-bigtimer-brown text-timer">
-        <HourField value={h} />
+        <HourField />
         <span className="text-black spacer">:</span>
-        <MinuteField value={m} />
+        <MinuteField />
         <span className="text-black spacer">:</span>
-        <SecondField value={s} />
+        <SecondField />
       </fieldset>
     </form>
   );

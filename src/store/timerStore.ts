@@ -6,7 +6,7 @@ const DEFAULT_DURATION = 10 * 60 * 1000;
 // const DEFAULT_DURATION = 5 * 1000;
 
 export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
-  // timer zone
+  // TIMER ZONE
   remainingTime: DEFAULT_DURATION,
   targetTime: null,
   isRunning: false,
@@ -128,5 +128,13 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
     });
   },
 
-  // end of timer zone
+  // end of TIMER ZONE
+
+  // UI ZONE
+  selectedInputGroup: "hours",
+
+  setSelectedInputGroup: (group) => {
+    set({ selectedInputGroup: group });
+  },
+  // end of UI ZONE
 }));
