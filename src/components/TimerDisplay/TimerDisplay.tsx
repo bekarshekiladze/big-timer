@@ -1,9 +1,15 @@
 import { useTimerStore } from "@/store/timerStore";
 import { HoursReading, MinutesReading, SecondsReading } from "./components";
 import { formatTimeDisplay } from "@/utils/timeFormat";
+import { msToHMS } from "@/utils/timeConversions";
+import { useEffect } from "react";
 
 export default function CountdownReading() {
-  const { hours, minutes, seconds } = useTimerStore();
+  const tick = useTimerStore((s) => s.tick);
+  const remainingTime = useTimerStore((s) => s.remainingTime);
+  const isRunning = useTimerStore((s) => s.isRunning);
+
+  const { hours, minutes, seconds } = msToHMS(remainingTime);
 
   const {
     hours: h,
@@ -12,13 +18,22 @@ export default function CountdownReading() {
     showHoursSeparator,
     showMinutesSeparator,
   } = formatTimeDisplay(hours, minutes, seconds);
+
+  useEffect(() => {
+    if (!isRunning) return;
+    const intervalId = setInterval(() => {
+      console.log(remainingTime);
+
+      tick();
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isRunning, tick]);
+
   return (
-    <div
-      onClick={() => {
-        useTimerStore.getState().setIsEditing(true);
-      }}
-      className="flex justify-center gap-2 p-4 font-bigtimer text-timer align-middle"
-    >
+    <div className="flex justify-center gap-2 p-4 font-bigtimer text-timer align-middle">
       {h !== null && (
         <>
           <HoursReading value={h} />

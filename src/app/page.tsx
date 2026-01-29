@@ -1,4 +1,4 @@
-import CountdownContainer from "@/components/CountdownContainer";
+import CountdownContainer from "@/components/TimerContainer";
 import Header from "@/components/Header";
 
 function page() {

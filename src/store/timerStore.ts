@@ -1,111 +1,132 @@
+import { TimerActions } from "../types/storeTypes";
 import { TimerState } from "@/types/storeTypes";
 import { create } from "zustand";
 
-export const useTimerStore = create<TimerState>((set) => ({
-  // TIMERS ZONE
-  timerIsRunning: false,
-  timerHasStarted: false,
-  timerIsFinished: false,
-  previouslySetDuration: null, //10 min default
-  targetDate: null,
-  pausedAt: null,
-  hours: 0,
-  minutes: 0,
-  seconds: 0,
+const DEFAULT_DURATION = 10 * 60 * 1000;
+// const DEFAULT_DURATION = 5 * 1000;
 
-  setPreviouslySetDuration: (value) => {
-    set((state) => {
-      if (!state.previouslySetDuration) return state;
-      return { previouslySetDuration: state.previouslySetDuration + value };
-    });
-  },
-  setTime: (h, m, s) =>
-    set({ hours: h, minutes: m, seconds: s, timerIsFinished: false }),
-  start: () =>
-    set((state) => {
-      if (state.timerIsRunning) return state;
+export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
+  // timer zone
+  remainingTime: DEFAULT_DURATION,
+  targetTime: null,
+  isRunning: false,
+  duration: DEFAULT_DURATION,
 
-      const pauseDuration = state.pausedAt ? Date.now() - state.pausedAt : 0;
-
-      return {
-        timerIsRunning: true,
-        timerHasStarted: true,
-        timerIsFinished: false,
-        targetDate: state.targetDate
-          ? state.targetDate + pauseDuration
-          : Date.now() + (state.previouslySetDuration ?? 0) * 1000,
-        pausedAt: null,
-      };
-    }),
-  pause: () =>
-    set((state) => {
-      if (!state.timerIsRunning) return state;
-
-      return {
-        timerIsRunning: false,
-        pausedAt: Number(Date.now()),
-      };
-    }),
-  reset: () => {
-    set(() => {
-      return {
-        timerIsRunning: false,
-        timerHasStarted: false,
-        timerIsFinished: false,
-        targetDate: null,
-        pausedAt: null,
-      };
-    });
-  },
-  setTargetDate: (milliseconds) => set({ targetDate: milliseconds }),
-  setFinished: (finished) => set({ timerIsFinished: finished }),
-  setHasStarted: (started) => set({ timerHasStarted: started }),
-  setIsRunning: (running) => set({ timerIsRunning: running }),
-  initializeTimer: (h: number, m: number, s: number, repeat?: boolean) =>
-    set((state) => ({
-      hours: h,
-      minutes: m,
-      seconds: s,
-      timerIsFinished: false,
-      settings: {
-        ...state.settings,
-        repeat: repeat ?? state.settings.repeat,
-      },
-    })),
-  syncTimer: (h: number, m: number, s: number, duration: number) => {
+  start: () => {
+    const { remainingTime, isRunning } = get();
+    if (isRunning) return;
     set({
-      hours: h,
-      minutes: m,
-      seconds: s,
-      previouslySetDuration: duration,
-      timerIsFinished: false,
-      isTimerLoading: false,
+      isRunning: true,
+      targetTime: Date.now() + remainingTime,
+    });
+    console.log("started");
+  },
+
+  pause: () => {
+    const { targetTime, isRunning } = get();
+    if (!targetTime || !isRunning) return;
+    set({
+      isRunning: false,
+      remainingTime: Math.max(0, targetTime - Date.now()),
+      targetTime: null,
     });
   },
-  // end of TIMERS ZONE
 
-  // UI zone
-  isEditing: false,
-  isTimerLoading: true,
-  selectedGroup: "hours",
-  setIsEditing: (editing) => set({ isEditing: editing }),
-  setSelectedGroup: (group) => set({ selectedGroup: group }),
-  setIsTimerLoading: (loading) => set({ isTimerLoading: loading }),
-  // end of UI zone
-
-  // settings zone
-  settings: {
-    continueBeyondZero: false,
-    playTimerCompleteSound: false,
-    playTimerCountdownSound: true,
-    reducedMotion: true,
-    repeat: false,
-    showNotifications: false,
-    warningWhenTimeIsAlmostUp: false,
+  reset: () => {
+    const { duration } = get();
+    set({
+      isRunning: false,
+      targetTime: null,
+      remainingTime: duration,
+    });
   },
-  setSettings: (settings) =>
+
+  tick: () => {
+    console.log("tick");
+
+    const { targetTime, isRunning } = get();
+    if (!isRunning || !targetTime) return;
+
+    if (Date.now() >= targetTime) {
+      set({
+        isRunning: false,
+        targetTime: null,
+        remainingTime: 0,
+      });
+      return;
+    }
+    set({ remainingTime: Math.max(0, targetTime - Date.now()) });
+  },
+
+  increment: (ms) => {
+    const { isRunning, targetTime, remainingTime } = get();
+
+    if (!isRunning || targetTime == null) {
+      set((state) => {
+        const next = Math.max(0, state.duration + ms);
+        return { remainingTime: next, duration: next };
+      });
+      return;
+    }
+
+    const now = Date.now();
+    const nextTarget = targetTime + ms;
+
+    // running
     set((state) => ({
-      settings: { ...state.settings, ...settings },
-    })),
-  // end of settings zone
+      targetTime: nextTarget,
+      remainingTime: Math.max(0, nextTarget - now),
+    }));
+  },
+
+  decrement: (ms) => {
+    const { isRunning, targetTime, remainingTime } = get();
+
+    if (!isRunning && targetTime == null && remainingTime == 0) return;
+
+    if (isRunning && targetTime != null) {
+      const nextTarget = targetTime - ms;
+      if (nextTarget <= Date.now()) {
+        set({
+          isRunning: false,
+          targetTime: null,
+          remainingTime: 0,
+        });
+        return;
+      }
+
+      set({
+        targetTime: nextTarget,
+        remainingTime: Math.max(0, nextTarget - Date.now()),
+      });
+      return;
+    }
+
+    set((state) => {
+      const next = Math.max(0, state.duration - ms);
+
+      return { remainingTime: next, duration: next };
+    });
+  },
+
+  setDuration: (ms) => set({ duration: ms }),
+
+  applyTimes: (ms) => {
+    const { isRunning } = get();
+    if (isRunning) {
+      set({
+        duration: ms,
+        targetTime: Date.now() + ms,
+        remainingTime: ms,
+      });
+      return;
+    }
+    set({
+      duration: ms,
+      remainingTime: ms,
+      targetTime: null,
+    });
+  },
+
+  // end of timer zone
 }));

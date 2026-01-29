@@ -1,4 +1,4 @@
-import { OnTheFlyControls } from "../OnTheFlyControls";
+import { OnTheFlyControls } from "../InputControls";
 import { PlayerControls } from "../PlayerControls";
 import { Wrapper } from "../Wrapper";
 
