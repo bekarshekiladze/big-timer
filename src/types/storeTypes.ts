@@ -7,6 +7,7 @@ export type TimerState = {
 
   // ui
   selectedInputGroup: SelectedInputGroup;
+  isEditing: boolean;
 };
 
 export type SelectedInputGroup = "hours" | "minutes" | "seconds";
@@ -28,4 +29,5 @@ export type TimerActions = {
   setSelectedInputGroup: (group: SelectedInputGroup) => void;
   moveSelection: (dir: "left" | "right") => void;
   nudgeSelected: (dir: "up" | "down") => void;
+  setIsEditing: (editing: boolean) => void;
 };

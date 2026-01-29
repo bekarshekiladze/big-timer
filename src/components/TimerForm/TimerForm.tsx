@@ -15,6 +15,7 @@ const pad2 = (s: string) => s.padStart(2, "0");
 export default function TimerForm() {
   const duration = useTimerStore((state) => state.duration);
   const applyTimes = useTimerStore((state) => state.applyTimes);
+  const setIsEditing = useTimerStore((state) => state.setIsEditing);
 
   const [draft, setDraft] = useState(() => {
     const { hours, minutes, seconds } = msToHMS(duration);
@@ -66,18 +67,17 @@ export default function TimerForm() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("submitted");
-    
+
     const h = clampByGroup("hours", Number(draft.hours || 0));
     const m = clampByGroup("minutes", Number(draft.minutes || 0));
     const s = clampByGroup("seconds", Number(draft.seconds || 0));
 
     const ms = (h * 3600 + m * 60 + s) * 1000;
     applyTimes(ms);
+    setIsEditing(false);
   };
 
   const formRef = useRef<HTMLFormElement>(null);
-  // const disableEditingMode = useTimerStore((state) => state.setIsEditing);
-  // useClickOutside(formRef, () => disableEditingMode(false));
 
   return (
     <form ref={formRef} onSubmit={onSubmit}>

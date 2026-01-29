@@ -1,5 +1,16 @@
 import { useTimerStore } from "@/store/timerStore";
 
 export default function MinutesReading({ value }: { value: string }) {
-  return <div>{value}</div>;
+  const setSelectedInputGroup = useTimerStore(
+    (state) => state.setSelectedInputGroup,
+  );
+  return (
+    <div
+      onClick={() => {
+        setSelectedInputGroup("minutes");
+      }}
+    >
+      {value}
+    </div>
+  );
 }

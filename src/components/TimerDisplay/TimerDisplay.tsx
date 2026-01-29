@@ -4,7 +4,7 @@ import { formatTimeDisplay } from "@/utils/timeFormat";
 import { msToHMS } from "@/utils/timeConversions";
 import { useEffect } from "react";
 
-export default function CountdownReading() {
+export default function TimerDisplay() {
   const tick = useTimerStore((s) => s.tick);
   const remainingTime = useTimerStore((s) => s.remainingTime);
   const isRunning = useTimerStore((s) => s.isRunning);
@@ -22,8 +22,6 @@ export default function CountdownReading() {
   useEffect(() => {
     if (!isRunning) return;
     const intervalId = setInterval(() => {
-      console.log(remainingTime);
-
       tick();
     }, 1000);
 

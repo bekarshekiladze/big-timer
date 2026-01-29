@@ -1,16 +1,15 @@
 "use client";
 
-import { CountdownReading } from "../TimerDisplay";
+import TimerDisplay from "../TimerDisplay/TimerDisplay";
 import { ReadingForm } from "../TimerForm";
-import { useTimerStore } from "@/store/timerStore";
-import * as motion from "motion/react-client";
-import { AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useTimerMode } from "@/hooks/useTimerMode";
 
 export default function Wrapper() {
-  const [isEditing, setIsediting] = useState(true);
+  const { isEditing, enterEdit } = useTimerMode();
+
   return (
-    <ReadingForm />
-    // <CountdownReading />
+    <div onClick={!isEditing ? enterEdit : undefined}>
+      {isEditing ? <ReadingForm /> : <TimerDisplay />}
+    </div>
   );
 }

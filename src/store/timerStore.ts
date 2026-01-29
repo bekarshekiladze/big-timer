@@ -1,3 +1,4 @@
+//@ts-nochec
 import { SelectedInputGroup } from "@/types/storeTypes";
 import { TimerActions } from "../types/storeTypes";
 import { TimerState } from "@/types/storeTypes";
@@ -141,6 +142,7 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
 
   // UI ZONE
   selectedInputGroup: "hours",
+  isEditing: false,
 
   setSelectedInputGroup: (group) => {
     set({ selectedInputGroup: group });
@@ -163,5 +165,7 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
     if (dir === "up") get().increment(step);
     else get().decrement(step);
   },
+
+  setIsEditing: (editing) => set({ isEditing: editing }),
   // end of UI ZONE
 }));
