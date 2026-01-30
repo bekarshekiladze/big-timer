@@ -4,6 +4,7 @@ import { IoMdInformationCircleOutline, IoIosSettings } from "react-icons/io";
 import { AiOutlineFullscreenExit, AiOutlineFullscreen } from "react-icons/ai";
 import { FaBlogger } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import Switch from "./Switch";
 
 function Header() {
   const [fullScreen, setIsFullscreen] = useState(false);
@@ -42,6 +43,7 @@ function Header() {
       <div className="flex gap-8 nav-items">
         <span className="flex items-center gap-2 text-bigtimer-yellow capitalize nav-item">
           <span className="nav-text">repeat</span>
+          <Switch />
         </span>
         <span className="flex items-center gap-2 text-bigtimer-yellow capitalize nav-item">
           <span className="nav-text">fullscreen</span>{" "}
