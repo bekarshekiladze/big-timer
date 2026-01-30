@@ -1,4 +1,4 @@
-import { useTimerStore } from "@/store/timerStores";
+import { useTimerStore } from "@/store/timerStore";
 
 export default function SecondsReading({ value }: { value: string }) {
   const setSelectedInputGroup = useTimerStore(

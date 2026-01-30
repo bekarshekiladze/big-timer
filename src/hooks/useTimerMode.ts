@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useTimerStore } from "@/store/timerStores";
+import { useTimerStore } from "@/store/timerStore";
 
 export function useTimerMode() {
   const isEditing = useTimerStore((s) => s.isEditing);

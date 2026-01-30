@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 import { OnTheFlyControls } from "../InputControls";
 import { PlayerControls } from "../PlayerControls";
 import { Wrapper } from "../Wrapper";
-import { useTimerStore } from "@/store/timerStores";
+import { useTimerStore } from "@/store/timerStore";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import useTimerHydrator from "@/hooks/usePersistenceInit";
 

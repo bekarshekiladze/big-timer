@@ -4,7 +4,7 @@ import {
   getResolvedDuration,
   writeSearchParams,
 } from "@/persistency/timerSync";
-import { useTimerStore } from "@/store/timerStores";
+import { useTimerStore } from "@/store/timerStore";
 import { useEffect, useRef } from "react";
 
 function useTimerHydrator() {

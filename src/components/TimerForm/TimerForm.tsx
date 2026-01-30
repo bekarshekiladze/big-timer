@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useTimerStore } from "@/store/timerStores";
+import { useTimerStore } from "@/store/timerStore";
 import { msToHMS } from "@/utils/timeConversions";
 import { onlyDigits } from "@/utils/inputControls/inputUx";
 import InputField from "./components/InputField";
@@ -29,10 +29,12 @@ export default function TimerForm() {
 
   useEffect(() => {
     const { hours, minutes, seconds } = msToHMS(duration);
-    setDraft({
-      hours: String(hours),
-      minutes: String(minutes).padStart(2, "0"),
-      seconds: String(seconds).padStart(2, "0"),
+    queueMicrotask(() => {
+      setDraft({
+        hours: String(hours),
+        minutes: String(minutes).padStart(2, "0"),
+        seconds: String(seconds).padStart(2, "0"),
+      });
     });
   }, [duration]);
 
