@@ -5,7 +5,7 @@ import {
   removeSearchParam,
   updateTargetTime,
 } from "@/persistency/timerSync";
-import { useTimerStore } from "@/store/timerStore";
+import { useTimerStore } from "@/store/timerStores";
 import { animate, press } from "motion";
 import { useEffect } from "react";
 

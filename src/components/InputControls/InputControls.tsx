@@ -1,6 +1,6 @@
 "use client";
 
-import { useTimerStore } from "@/store/timerStore";
+import { useTimerStore } from "@/store/timerStores";
 import {
   getNextIncrementMs,
   getNextDecrementMs,

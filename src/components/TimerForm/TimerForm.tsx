@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useTimerStore } from "@/store/timerStore";
+import { useTimerStore } from "@/store/timerStores";
 import { msToHMS } from "@/utils/timeConversions";
 import { onlyDigits } from "@/utils/inputControls/inputUx";
 import InputField from "./components/InputField";

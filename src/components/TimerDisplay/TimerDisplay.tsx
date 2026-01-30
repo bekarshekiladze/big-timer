@@ -1,4 +1,4 @@
-import { useTimerStore } from "@/store/timerStore";
+import { useTimerStore } from "@/store/timerStores";
 import { HoursReading, MinutesReading, SecondsReading } from "./components";
 import { formatTimeDisplay } from "@/utils/timeFormat";
 import { msToHMS } from "@/utils/timeConversions";

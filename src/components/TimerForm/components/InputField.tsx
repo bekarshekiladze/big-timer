@@ -1,4 +1,4 @@
-import { useTimerStore } from "@/store/timerStore";
+import { useTimerStore } from "@/store/timerStores";
 import { SelectedInputGroup } from "@/types/storeTypes";
 import { useEffect, useRef, useState } from "react";
 
