@@ -15,7 +15,6 @@ export default function PlayerControls() {
   const reset = useTimerStore((s) => s.reset);
   const targetTime = useTimerStore((s) => s.targetTime);
   const isRunning = useTimerStore((s) => s.isRunning);
-  const remainingTime = useTimerStore((s) => s.remainingTime);
 
   useEffect(() => {
     press(".primary-button", (element) => {
@@ -40,7 +39,7 @@ export default function PlayerControls() {
           start
         </button>
       )}
-      {remainingTime === 0 && (
+      {isRunning && (
         <button
           onClick={() => {
             reset();
