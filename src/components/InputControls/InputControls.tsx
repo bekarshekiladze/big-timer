@@ -10,6 +10,8 @@ import { FaMinus } from "react-icons/fa";
 
 export default function OnTheFlyControls() {
   const duration = useTimerStore((s) => s.duration);
+  const increment = useTimerStore((s) => s.increment);
+  const decrement = useTimerStore((s) => s.decrement);
   const isRunning = useTimerStore((s) => s.isRunning);
   const remainingTime = useTimerStore((s) => s.remainingTime);
   const applyTimes = useTimerStore((s) => s.applyTimes);

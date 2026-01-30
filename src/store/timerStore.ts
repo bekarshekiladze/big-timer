@@ -83,7 +83,7 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
   },
 
   increment: (ms) => {
-    const { isRunning, targetTime } = get();
+    const { isRunning, targetTime, remainingTime } = get();
 
     if (!isRunning || targetTime == null) {
       set((state) => {
@@ -96,10 +96,15 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
     const now = Date.now();
     const nextTarget = targetTime + ms;
 
+<<<<<<< HEAD
     set({
+=======
+    // running
+    set((state) => ({
+>>>>>>> parent of 81505b1 (fix: lint errors)
       targetTime: nextTarget,
       remainingTime: Math.max(0, nextTarget - now),
-    });
+    }));
   },
 
   decrement: (ms) => {

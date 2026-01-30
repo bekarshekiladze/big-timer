@@ -1,6 +1,6 @@
 import { useTimerStore } from "@/store/timerStore";
 import { SelectedInputGroup } from "@/types/storeTypes";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Group = "hours" | "minutes" | "seconds";
 
@@ -8,6 +8,7 @@ export default function InputField({
   name,
   value,
   onChange,
+  onBlur,
 }: {
   name: Group;
   value: string;
@@ -20,6 +21,10 @@ export default function InputField({
   const select = useTimerStore((state) => state.setSelectedInputGroup);
   const moveSelection = useTimerStore((state) => state.moveSelection);
   const nudgeSelected = useTimerStore((state) => state.nudgeSelected);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Only let the "active" field react
