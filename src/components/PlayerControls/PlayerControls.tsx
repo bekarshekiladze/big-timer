@@ -15,6 +15,7 @@ export default function PlayerControls() {
   const reset = useTimerStore((s) => s.reset);
   const targetTime = useTimerStore((s) => s.targetTime);
   const isRunning = useTimerStore((s) => s.isRunning);
+  const remainingTime = useTimerStore((s) => s.remainingTime);
 
   useEffect(() => {
     press(".primary-button", (element) => {
@@ -29,30 +30,36 @@ export default function PlayerControls() {
 
   return (
     <div className="buttons-container">
-      <button
-        onClick={() => {
-          start();
-        }}
-        className="button primary-button"
-      >
-        start
-      </button>
-      <button
-        onClick={() => {
-          reset();
-        }}
-        className="button primary-button"
-      >
-        reset
-      </button>
-      <button
-        onClick={() => {
-          pause();
-        }}
-        className="button primary-button"
-      >
-        pause
-      </button>
+      {!isRunning && (
+        <button
+          onClick={() => {
+            start();
+          }}
+          className="button primary-button"
+        >
+          start
+        </button>
+      )}
+      {remainingTime === 0 && (
+        <button
+          onClick={() => {
+            reset();
+          }}
+          className="button primary-button"
+        >
+          reset
+        </button>
+      )}
+      {isRunning && (
+        <button
+          onClick={() => {
+            pause();
+          }}
+          className="button primary-button"
+        >
+          pause
+        </button>
+      )}
     </div>
   );
 }

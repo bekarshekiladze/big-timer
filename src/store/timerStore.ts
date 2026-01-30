@@ -45,7 +45,6 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
       isRunning: true,
       targetTime: Date.now() + remainingTime,
     });
-    console.log("started");
   },
 
   pause: () => {
