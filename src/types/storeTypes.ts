@@ -4,6 +4,8 @@ export type TimerState = {
   targetTime: number | null;
   isRunning: boolean;
   remainingTime: number;
+  isInitiated: boolean;
+  repeating: boolean;
 
   // ui
   selectedInputGroup: SelectedInputGroup;
@@ -14,11 +16,11 @@ export type SelectedInputGroup = "hours" | "minutes" | "seconds";
 
 export type TimerActions = {
   // init
-  isInitiated: boolean;
 
   hydrate: (ms: number) => void;
 
   // timer
+  repeat: (repeat: boolean) => void;
   start: () => void;
   pause: () => void;
   reset: () => void;

@@ -1,11 +1,10 @@
-//@ts-nochec
 import { SelectedInputGroup } from "@/types/storeTypes";
 import { TimerActions } from "../types/storeTypes";
 import { TimerState } from "@/types/storeTypes";
 import { create } from "zustand";
 
-const DEFAULT_DURATION = 600 * 1000;
-// const DEFAULT_DURATION  = 5 * 1000;
+// const DEFAULT_DURATION = 600 * 1000;
+const DEFAULT_DURATION = 5 * 1000;
 
 const GROUPS: SelectedInputGroup[] = ["hours", "minutes", "seconds"];
 
@@ -35,6 +34,9 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
   targetTime: null,
   isRunning: false,
   duration: DEFAULT_DURATION,
+  repeating: false,
+
+  repeat: (repeating) => set({ repeating }),
 
   start: () => {
     const { remainingTime, isRunning } = get();
@@ -66,20 +68,28 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
   },
 
   tick: () => {
-    console.log("tick");
-
-    const { targetTime, isRunning } = get();
+    const { targetTime, isRunning, repeating, duration } = get();
     if (!isRunning || !targetTime) return;
 
-    if (Date.now() >= targetTime) {
-      set({
-        isRunning: false,
-        targetTime: null,
-        remainingTime: 0,
-      });
+    const now = Date.now();
+
+    if (now >= targetTime) {
+      if (repeating) {
+        set({
+          targetTime: now + duration,
+          remainingTime: duration,
+        });
+      } else {
+        set({
+          isRunning: false,
+          targetTime: null,
+          remainingTime: 0,
+        });
+      }
       return;
     }
-    set({ remainingTime: Math.max(0, targetTime - Date.now()) });
+
+    set({ remainingTime: Math.max(0, targetTime - now) });
   },
 
   increment: (ms) => {
