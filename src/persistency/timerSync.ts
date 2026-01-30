@@ -2,6 +2,7 @@
 import {
   DEFAULT_DURATION,
   STORAGE_KEY_DURATION,
+  STORAGE_KEY_STATES,
   STORAGE_KEY_TARGET,
 } from "@/constants/times";
 import { hmsToMs, msToHMS } from "../utils/timeConversions";
@@ -60,19 +61,28 @@ export function writeSearchParams(
 // **********
 // LocalStorage
 // **********
+export function updateRunningStatus(isRunning: boolean) {
+  const state = { isTimerRunning: isRunning };
+
+  localStorage.setItem(STORAGE_KEY_STATES, JSON.stringify(state));
+}
 
 // **********
 // URL & LocalStorage
 // **********
 
-export function updateTargetTime(isRunning, targetTime) {
+export function updateTargetTime(
+  isRunning: boolean,
+  targetTime: number | null,
+) {
   if (isRunning) {
-    localStorage.setItem(STORAGE_KEY_TARGET, targetTime);
-    addNewSearchParam("target", targetTime);
+    localStorage.setItem(STORAGE_KEY_TARGET, JSON.stringify(targetTime));
+    addNewSearchParam("target", JSON.stringify(targetTime));
   } else {
     localStorage.removeItem(STORAGE_KEY_TARGET);
     removeSearchParam("target");
   }
+  updateRunningStatus(isRunning);
 }
 
 export function getResolvedDuration(): number {
@@ -85,7 +95,7 @@ export function getResolvedDuration(): number {
   const fromUrl = hmsToMs(h, m, s);
 
   if (fromUrl !== null && fromUrl > 0) {
-    localStorage.setItem(STORAGE_KEY_DURATION, fromUrl);
+    localStorage.setItem(STORAGE_KEY_DURATION, JSON.stringify(fromUrl));
     return fromUrl;
   }
 
