@@ -13,6 +13,11 @@ export type TimerState = {
 export type SelectedInputGroup = "hours" | "minutes" | "seconds";
 
 export type TimerActions = {
+  // init
+  isInitiated: boolean;
+
+  hydrate: (ms: number) => void;
+
   // timer
   start: () => void;
   pause: () => void;

@@ -4,8 +4,8 @@ import { TimerActions } from "../types/storeTypes";
 import { TimerState } from "@/types/storeTypes";
 import { create } from "zustand";
 
-const DEFAULT_DURATION = 10 * 60 * 1000;
-// const DEFAULT_DURATION = 5 * 1000;
+const DEFAULT_DURATION = 600 * 1000;
+// const DEFAULT_DURATION  = 5 * 1000;
 
 const GROUPS: SelectedInputGroup[] = ["hours", "minutes", "seconds"];
 
@@ -16,6 +16,20 @@ const STEP_MS: Record<SelectedInputGroup, number> = {
 };
 
 export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
+  // INIT
+  isInitiated: false,
+
+  hydrate: (ms) => {
+    set({
+      duration: ms,
+      remainingTime: ms,
+      targetTime: null,
+      isRunning: false,
+      isInitiated: true,
+    });
+  },
+  // end of INIT
+
   // TIMER ZONE
   remainingTime: DEFAULT_DURATION,
   targetTime: null,
@@ -82,7 +96,6 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
     const now = Date.now();
     const nextTarget = targetTime + ms;
 
-    // running
     set({
       targetTime: nextTarget,
       remainingTime: Math.max(0, nextTarget - now),
