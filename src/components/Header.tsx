@@ -5,7 +5,6 @@ import { AiOutlineFullscreenExit, AiOutlineFullscreen } from "react-icons/ai";
 import { FaBlogger } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Switch from "./Switch";
-import { useTimerStore } from "@/store/timerStore";
 
 function Header() {
   const [fullScreen, setIsFullscreen] = useState(false);

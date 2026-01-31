@@ -22,7 +22,10 @@ export default function OnTheFlyControls() {
     <div className="text-bigtimer-black buttons-container">
       <button
         onClick={() => {
-          applyTimes(getNextIncrementMs(base));
+          const value = getNextIncrementMs(base);
+          console.log(value);
+
+          applyTimes(value);
         }}
         className="place-content-center grid round button primary-button"
       >

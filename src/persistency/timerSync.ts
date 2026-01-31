@@ -49,11 +49,16 @@ export function buildTimerSearchParamsFromMs(ms: number): URLSearchParams {
 }
 
 // save URLSearchParams to url
-export function writeSearchParams(
+export function mergeSearchParams(
   params: URLSearchParams,
   mode: "replace" | "push" = "replace",
 ) {
-  const url = `${window.location.pathname}?${params.toString()}`;
+  const url = new URL(window.location.href);
+
+  for (const [key, value] of params.entries()) {
+    url.searchParams.set(key, value);
+  }
+
   if (mode === "replace") window.history.replaceState(null, "", url);
   else window.history.pushState(null, "", url);
 }
@@ -95,17 +100,18 @@ export function getResolvedDuration(): number {
   const fromUrl = hmsToMs(h, m, s);
 
   if (fromUrl !== null && fromUrl > 0) {
-    localStorage.setItem(STORAGE_KEY_DURATION, JSON.stringify(fromUrl));
+    localStorage.setItem(STORAGE_KEY_DURATION, JSON.stringify(Math.round(fromUrl/1000)));
     return fromUrl;
   }
 
   // storage later
   const stored = localStorage.getItem(STORAGE_KEY_DURATION);
-  console.log(stored);
   if (stored !== null) {
     const n = Number(stored);
 
-    if (Number.isFinite(n) && n >= 0) return n * 1000;
+    if (Number.isFinite(n) && n >= 0) {
+      return n * 1000;
+    }
   }
 
   // fallback to default duration

@@ -27,6 +27,7 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
       isInitiated: true,
     });
   },
+
   // end of INIT
 
   // TIMER ZONE
