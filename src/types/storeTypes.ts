@@ -1,3 +1,5 @@
+import { UpdaterDraft } from "@/hooks/useTimerHydrator";
+
 export type TimerState = {
   // timer
   duration: number;
@@ -17,7 +19,7 @@ export type SelectedInputGroup = "hours" | "minutes" | "seconds";
 export type TimerActions = {
   // init
 
-  hydrate: (ms: number) => void;
+  hydrate: (draft: UpdaterDraft) => void;
 
   // timer
   repeat: (repeat: boolean) => void;

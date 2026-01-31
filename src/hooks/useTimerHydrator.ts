@@ -1,4 +1,3 @@
-import { STORAGE_KEY_DURATION } from "@/constants/times";
 import {
   buildTimerSearchParamsFromMs,
   getResolvedDuration,
@@ -7,22 +6,31 @@ import {
 import { useTimerStore } from "@/store/timerStore";
 import { useEffect, useRef } from "react";
 
+export type UpdaterDraft = {
+  duration: number;
+  remainingTime: number;
+  targetTime: null | number;
+  isRunning: boolean;
+  isInitiated: boolean;
+};
+
 function useTimerHydrator() {
   const hydrate = useTimerStore((state) => state.hydrate);
-  const duration = useTimerStore((state) => state.duration);
+  // const duration = useTimerStore((state) => state.duration);
 
   useEffect(() => {
     const resolvedDuration = getResolvedDuration();
     console.log(resolvedDuration);
 
-    // localStorage.setItem(
-    //   STORAGE_KEY_DURATION,
-    //   JSON.stringify(Math.round(resolvedDuration / 1000)),
-    // );
-
-    hydrate(resolvedDuration);
-    const params = buildTimerSearchParamsFromMs(resolvedDuration);
-    mergeSearchParams(params);
+    hydrate({
+      // INITIAL STATE
+      duration: resolvedDuration,
+      remainingTime: resolvedDuration,
+      targetTime: null,
+      isRunning: false,
+      isInitiated: true,
+    });
+    mergeSearchParams(resolvedDuration);
   }, [hydrate]);
 }
 export default useTimerHydrator;

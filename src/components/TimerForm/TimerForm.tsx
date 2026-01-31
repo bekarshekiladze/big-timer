@@ -3,6 +3,7 @@ import { useTimerStore } from "@/store/timerStore";
 import { msToHMS } from "@/utils/timeConversions";
 import { onlyDigits } from "@/utils/inputControls/inputUx";
 import InputField from "./components/InputField";
+import { updateQueryAndStorage } from "@/persistency/timerSync";
 
 type Group = "hours" | "minutes" | "seconds";
 const clamp = (n: number, min: number, max: number) =>
@@ -77,6 +78,7 @@ export default function TimerForm() {
 
     const ms = (h * 3600 + m * 60 + s) * 1000;
     applyTimes(ms);
+    updateQueryAndStorage(ms);
     setIsEditing(false);
   };
 

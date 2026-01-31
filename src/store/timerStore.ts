@@ -1,3 +1,4 @@
+import { UpdaterDraft } from "./../hooks/useTimerHydrator";
 import { SelectedInputGroup } from "@/types/storeTypes";
 import { TimerActions } from "../types/storeTypes";
 import { TimerState } from "@/types/storeTypes";
@@ -18,14 +19,13 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
   // INIT
   isInitiated: false,
 
-  hydrate: (ms) => {
-    set({
-      duration: ms,
-      remainingTime: ms,
-      targetTime: null,
-      isRunning: false,
-      isInitiated: true,
-    });
+  // duration: ms,
+  // remainingTime: ms,
+  // targetTime: null,
+  // isRunning: false,
+  // isInitiated: true,
+  hydrate: (updaterDraft) => {
+    set(updaterDraft);
   },
 
   // end of INIT
@@ -149,7 +149,6 @@ export const useTimerStore = create<TimerActions & TimerState>((set, get) => ({
     const { isRunning } = get();
     if (isRunning) {
       set({
-        duration: ms,
         targetTime: Date.now() + ms,
         remainingTime: ms,
       });

@@ -1,5 +1,6 @@
 "use client";
 
+import { updateQueryAndStorage } from "@/persistency/timerSync";
 import { useTimerStore } from "@/store/timerStore";
 import {
   getNextIncrementMs,
@@ -10,8 +11,6 @@ import { FaMinus } from "react-icons/fa";
 
 export default function OnTheFlyControls() {
   const duration = useTimerStore((s) => s.duration);
-  const increment = useTimerStore((s) => s.increment);
-  const decrement = useTimerStore((s) => s.decrement);
   const isRunning = useTimerStore((s) => s.isRunning);
   const remainingTime = useTimerStore((s) => s.remainingTime);
   const applyTimes = useTimerStore((s) => s.applyTimes);
@@ -22,10 +21,14 @@ export default function OnTheFlyControls() {
     <div className="text-bigtimer-black buttons-container">
       <button
         onClick={() => {
-          const value = getNextIncrementMs(base);
-          console.log(value);
-
-          applyTimes(value);
+          let ms;
+          if (isRunning) {
+            ms = getNextIncrementMs(remainingTime);
+          } else {
+            ms = getNextIncrementMs(duration);
+            updateQueryAndStorage(ms);
+          }
+          applyTimes(ms);
         }}
         className="place-content-center grid round button primary-button"
       >
@@ -33,7 +36,14 @@ export default function OnTheFlyControls() {
       </button>
       <button
         onClick={() => {
-          applyTimes(getNextDecrementMs(base));
+          let ms;
+          if (isRunning) {
+            ms = getNextDecrementMs(remainingTime);
+          } else {
+            ms = getNextDecrementMs(duration);
+            updateQueryAndStorage(ms);
+          }
+          applyTimes(ms);
         }}
         className="place-content-center grid round button primary-button"
       >

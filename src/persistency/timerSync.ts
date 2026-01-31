@@ -11,6 +11,8 @@ import { hmsToMs, msToHMS } from "../utils/timeConversions";
 // URL Section
 // **********
 
+const TIMER_KEYS = ["hours", "minutes", "seconds", "repeat"] as const;
+
 // add pair of param
 export function addNewSearchParam(key: string, value: string) {
   const params = new URLSearchParams(window.location.search);
@@ -44,23 +46,21 @@ export function buildTimerSearchParamsFromMs(ms: number): URLSearchParams {
   if (minutes > 0) params.set("minutes", String(minutes));
   if (seconds > 0) params.set("seconds", String(seconds));
 
-  params.set("repeat", "false");
+  const currentParams = new URLSearchParams(window.location.search);
+  params.set("repeat", currentParams.get("repeat") ?? "false");
   return params;
 }
 
 // save URLSearchParams to url
-export function mergeSearchParams(
-  params: URLSearchParams,
-  mode: "replace" | "push" = "replace",
-) {
+export function mergeSearchParams(ms: number) {
   const url = new URL(window.location.href);
 
-  for (const [key, value] of params.entries()) {
-    url.searchParams.set(key, value);
-  }
+  for (const k of TIMER_KEYS) url.searchParams.delete(k);
 
-  if (mode === "replace") window.history.replaceState(null, "", url);
-  else window.history.pushState(null, "", url);
+  const nextParams = buildTimerSearchParamsFromMs(ms);
+  for (const [k, v] of nextParams.entries()) url.searchParams.set(k, v);
+
+  window.history.replaceState(null, "", url);
 }
 
 // **********
@@ -70,6 +70,12 @@ export function updateRunningStatus(isRunning: boolean) {
   const state = { isTimerRunning: isRunning };
 
   localStorage.setItem(STORAGE_KEY_STATES, JSON.stringify(state));
+}
+export function updatePreviouslySetDuration(ms: number) {
+  localStorage.setItem(
+    STORAGE_KEY_DURATION,
+    JSON.stringify(Math.round(ms / 1000)),
+  );
 }
 
 // **********
@@ -97,11 +103,11 @@ export function getResolvedDuration(): number {
   const h = Number(search.get("hours") ?? 0);
   const m = Number(search.get("minutes") ?? 0);
   const s = Number(search.get("seconds") ?? 0);
-  const fromUrl = hmsToMs(h, m, s);
+  const fromUrlToMs = hmsToMs(h, m, s);
 
-  if (fromUrl !== null && fromUrl > 0) {
-    localStorage.setItem(STORAGE_KEY_DURATION, JSON.stringify(Math.round(fromUrl/1000)));
-    return fromUrl;
+  if (fromUrlToMs !== null && fromUrlToMs > 0) {
+    updatePreviouslySetDuration(fromUrlToMs);
+    return fromUrlToMs;
   }
 
   // storage later
@@ -116,4 +122,9 @@ export function getResolvedDuration(): number {
 
   // fallback to default duration
   return DEFAULT_DURATION;
+}
+
+export function updateQueryAndStorage(ms: number) {
+  mergeSearchParams(ms);
+  updatePreviouslySetDuration(ms);
 }
