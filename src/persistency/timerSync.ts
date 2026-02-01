@@ -1,7 +1,9 @@
 // @ts-nochec
 import {
   DEFAULT_DURATION,
+  DEFAULT_REPEAT,
   STORAGE_KEY_DURATION,
+  STORAGE_KEY_SETTINGS,
   STORAGE_KEY_STATES,
   STORAGE_KEY_TARGET,
 } from "@/constants/times";
@@ -63,6 +65,12 @@ export function mergeSearchParams(ms: number) {
   window.history.replaceState(null, "", url);
 }
 
+export function updateRepeatInUrl(repeat: boolean) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("repeat", String(repeat));
+  window.history.replaceState(null, "", url);
+}
+
 // **********
 // LocalStorage
 // **********
@@ -71,11 +79,25 @@ export function updateRunningStatus(isRunning: boolean) {
 
   localStorage.setItem(STORAGE_KEY_STATES, JSON.stringify(state));
 }
+
 export function updatePreviouslySetDuration(ms: number) {
   localStorage.setItem(
     STORAGE_KEY_DURATION,
     JSON.stringify(Math.round(ms / 1000)),
   );
+}
+export function updateRepeatStorageSetting(repeat: boolean) {
+  try {
+    const settingsString = localStorage.getItem(STORAGE_KEY_SETTINGS);
+    const currentSettings = settingsString ? JSON.parse(settingsString) : {};
+    const updatedSettings = {
+      ...currentSettings,
+      repeat: repeat,
+    };
+    localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(updatedSettings));
+  } catch (error) {
+    console.log("Couldnt update repeat in storage");
+  }
 }
 
 // **********
@@ -124,7 +146,43 @@ export function getResolvedDuration(): number {
   return DEFAULT_DURATION;
 }
 
+export function getResolvedRepeat(): boolean {
+  // url first
+  const search = new URLSearchParams(window.location.search);
+
+  const r = search.get("repeat");
+  if (r === "true") {
+    updateRepeatInUrl(true);
+    updateRepeatStorageSetting(true);
+    return true;
+  }
+  if (r === "false") {
+    updateRepeatInUrl(false);
+    updateRepeatStorageSetting(false);
+    return false;
+  }
+
+  // storage later
+  const settingsString = localStorage.getItem(STORAGE_KEY_SETTINGS);
+  if (settingsString !== null) {
+    try {
+      const settingsObj = JSON.parse(settingsString);
+      if (typeof settingsObj?.repeat === "boolean") {
+        return settingsObj.repeat;
+      }
+    } catch (error) {}
+  }
+
+  // fallback to default duration
+  return DEFAULT_REPEAT;
+}
+
 export function updateQueryAndStorage(ms: number) {
   mergeSearchParams(ms);
   updatePreviouslySetDuration(ms);
+}
+
+export function updateRepeatQueryAndStorage(repeat: boolean) {
+  updateRepeatInUrl(repeat);
+  updateRepeatStorageSetting(repeat);
 }

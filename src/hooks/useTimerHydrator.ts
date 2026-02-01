@@ -1,10 +1,10 @@
 import {
-  buildTimerSearchParamsFromMs,
   getResolvedDuration,
+  getResolvedRepeat,
   mergeSearchParams,
 } from "@/persistency/timerSync";
 import { useTimerStore } from "@/store/timerStore";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export type UpdaterDraft = {
   duration: number;
@@ -12,6 +12,7 @@ export type UpdaterDraft = {
   targetTime: null | number;
   isRunning: boolean;
   isInitiated: boolean;
+  repeating: boolean;
 };
 
 function useTimerHydrator() {
@@ -20,7 +21,9 @@ function useTimerHydrator() {
 
   useEffect(() => {
     const resolvedDuration = getResolvedDuration();
-    console.log(resolvedDuration);
+    const resolvedRepeat = getResolvedRepeat();
+
+    console.log(resolvedRepeat);
 
     hydrate({
       // INITIAL STATE
@@ -29,6 +32,7 @@ function useTimerHydrator() {
       targetTime: null,
       isRunning: false,
       isInitiated: true,
+      repeating: resolvedRepeat,
     });
     mergeSearchParams(resolvedDuration);
   }, [hydrate]);

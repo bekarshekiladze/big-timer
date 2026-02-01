@@ -1,3 +1,4 @@
+import { updateRepeatQueryAndStorage } from "@/persistency/timerSync";
 import { useTimerStore } from "@/store/timerStore";
 
 export default function Switch() {
@@ -10,7 +11,11 @@ export default function Switch() {
         id={`react-switch-new`}
         type="checkbox"
         checked={repeating}
-        onChange={(e) => repeat(e.target.checked)}
+        onChange={(e) => {
+          const repeating = e.target.checked;
+          repeat(repeating);
+          updateRepeatQueryAndStorage(repeating);
+        }}
       />
       <label className="react-switch-label" htmlFor={`react-switch-new`}>
         <span className={`react-switch-button`} />

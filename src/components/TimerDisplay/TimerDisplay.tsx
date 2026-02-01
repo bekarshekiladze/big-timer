@@ -8,6 +8,7 @@ export default function TimerDisplay() {
   const tick = useTimerStore((s) => s.tick);
   const remainingTime = useTimerStore((s) => s.remainingTime);
   const isRunning = useTimerStore((s) => s.isRunning);
+  const isInitiated = useTimerStore((s) => s.isInitiated);
 
   const { hours, minutes, seconds } = msToHMS(remainingTime);
 
@@ -34,15 +35,15 @@ export default function TimerDisplay() {
     <div className="flex justify-center gap-2 p-4 font-bigtimer text-timer align-middle">
       {h !== null && (
         <>
-          <HoursReading value={h} />
+          <HoursReading value={isInitiated ? h : "00"} />
           {showHoursSeparator && <span className="separator">:</span>}
         </>
       )}
 
-      <MinutesReading value={m} />
+      <MinutesReading value={isInitiated ? m : "00"} />
       {showMinutesSeparator && <span className="separator">:</span>}
 
-      <SecondsReading value={s} />
+      <SecondsReading value={isInitiated ? s : "00"} />
     </div>
   );
 }
