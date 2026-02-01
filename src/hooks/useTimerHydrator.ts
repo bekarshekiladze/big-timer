@@ -1,6 +1,7 @@
 import {
   getResolvedDuration,
   getResolvedRepeat,
+  getResolvedRunStateFromUrl,
   mergeSearchParams,
 } from "@/persistency/timerSync";
 import { useTimerStore } from "@/store/timerStore";
@@ -22,19 +23,23 @@ function useTimerHydrator() {
   useEffect(() => {
     const resolvedDuration = getResolvedDuration();
     const resolvedRepeat = getResolvedRepeat();
+    const { resolvedIsRunning, resolvedTargetTime } =
+      getResolvedRunStateFromUrl();
 
-    console.log(resolvedRepeat);
+    console.log({ resolvedIsRunning, resolvedTargetTime });
 
     hydrate({
       // INITIAL STATE
       duration: resolvedDuration,
       remainingTime: resolvedDuration,
-      targetTime: null,
-      isRunning: false,
+      targetTime: resolvedTargetTime,
+      isRunning: resolvedIsRunning,
       isInitiated: true,
       repeating: resolvedRepeat,
     });
+    console.log(location.search);
     mergeSearchParams(resolvedDuration);
+    console.log(location.search);
   }, [hydrate]);
 }
 export default useTimerHydrator;

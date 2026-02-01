@@ -42,7 +42,7 @@ export function removeSearchParam(key: string) {
 export function buildTimerSearchParamsFromMs(ms: number): URLSearchParams {
   const { hours, minutes, seconds } = msToHMS(ms);
 
-  const params = new URLSearchParams();
+  const params = new URLSearchParams(window.location.search);
 
   if (hours > 0) params.set("hours", String(hours));
   if (minutes > 0) params.set("minutes", String(minutes));
@@ -50,6 +50,7 @@ export function buildTimerSearchParamsFromMs(ms: number): URLSearchParams {
 
   const currentParams = new URLSearchParams(window.location.search);
   params.set("repeat", currentParams.get("repeat") ?? "false");
+
   return params;
 }
 
@@ -62,12 +63,25 @@ export function mergeSearchParams(ms: number) {
   const nextParams = buildTimerSearchParamsFromMs(ms);
   for (const [k, v] of nextParams.entries()) url.searchParams.set(k, v);
 
+  const t = url.searchParams.get("target");
+  if (t !== null) {
+    url.searchParams.delete("target");
+    url.searchParams.set("target", t);
+  }
+
   window.history.replaceState(null, "", url);
 }
 
 export function updateRepeatInUrl(repeat: boolean) {
   const url = new URL(window.location.href);
   url.searchParams.set("repeat", String(repeat));
+
+  const t = url.searchParams.get("target");
+  if (t !== null) {
+    url.searchParams.delete("target");
+    url.searchParams.set("target", t);
+  }
+
   window.history.replaceState(null, "", url);
 }
 
@@ -175,6 +189,36 @@ export function getResolvedRepeat(): boolean {
 
   // fallback to default duration
   return DEFAULT_REPEAT;
+}
+
+export type ResolvedRunState = {
+  resolvedIsRunning: boolean;
+  resolvedTargetTime: number | null;
+};
+
+export function getResolvedRunStateFromUrl(): ResolvedRunState {
+  const search = new URLSearchParams(window.location.search);
+
+  const raw = search.get("target");
+
+  // no param
+  if (raw === null) {
+    return { resolvedIsRunning: false, resolvedTargetTime: null };
+  }
+
+  // must be a number
+  const target = Number(raw);
+  if (!Number.isFinite(target) || target <= 0) {
+    return { resolvedIsRunning: false, resolvedTargetTime: null };
+  }
+
+  // running means target is in the future
+  const resolvedIsRunning = target > Date.now();
+
+  return {
+    resolvedIsRunning,
+    resolvedTargetTime: resolvedIsRunning ? target : null,
+  };
 }
 
 export function updateQueryAndStorage(ms: number) {

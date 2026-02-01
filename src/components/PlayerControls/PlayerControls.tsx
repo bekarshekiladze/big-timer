@@ -24,9 +24,6 @@ export default function PlayerControls() {
         animate(element, { scale: 1 }, { type: "spring", stiffness: 500 });
     });
   }, []);
-  useEffect(() => {
-    updateTargetTime(isRunning, targetTime);
-  }, [isRunning, targetTime]);
 
   return (
     <div className="buttons-container">
@@ -34,6 +31,7 @@ export default function PlayerControls() {
         <button
           onClick={() => {
             start();
+            updateTargetTime(true, Date.now() + remainingTime);
           }}
           className="button primary-button"
         >
@@ -44,6 +42,7 @@ export default function PlayerControls() {
         <button
           onClick={() => {
             reset();
+            updateTargetTime(false, null);
           }}
           className="button primary-button"
         >
@@ -54,6 +53,7 @@ export default function PlayerControls() {
         <button
           onClick={() => {
             pause();
+            updateTargetTime(false, null);
           }}
           className="button primary-button"
         >
