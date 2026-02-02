@@ -1,0 +1,54 @@
+"use client";
+
+import { updateQueryAndStorage } from "@/persistency/timerSync";
+import { useTimerStore } from "@/store/timerStore";
+import {
+  getNextIncrementMs,
+  getNextDecrementMs,
+} from "@/utils/inputControls/buttonInputControl";
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
+
+export default function OnTheFlyControls() {
+  const duration = useTimerStore((s) => s.duration);
+  const isRunning = useTimerStore((s) => s.isRunning);
+  const remainingTime = useTimerStore((s) => s.remainingTime);
+  const applyTimes = useTimerStore((s) => s.applyTimes);
+
+  const base = isRunning ? remainingTime : duration;
+
+  return (
+    <div className="text-bigtimer-black buttons-container">
+      <button
+        onClick={() => {
+          let ms;
+          if (isRunning) {
+            ms = getNextIncrementMs(remainingTime);
+          } else {
+            ms = getNextIncrementMs(duration);
+            updateQueryAndStorage(ms);
+          }
+          applyTimes(ms);
+        }}
+        className="place-content-center grid round button primary-button"
+      >
+        <FaPlus />
+      </button>
+      <button
+        onClick={() => {
+          let ms;
+          if (isRunning) {
+            ms = getNextDecrementMs(remainingTime);
+          } else {
+            ms = getNextDecrementMs(duration);
+            updateQueryAndStorage(ms);
+          }
+          applyTimes(ms);
+        }}
+        className="place-content-center grid round button primary-button"
+      >
+        <FaMinus />
+      </button>
+    </div>
+  );
+}
