@@ -26,8 +26,6 @@ function useTimerHydrator() {
     const { resolvedIsRunning, resolvedTargetTime } =
       getResolvedRunStateFromUrl();
 
-    console.log({ resolvedIsRunning, resolvedTargetTime });
-
     hydrate({
       // INITIAL STATE
       duration: resolvedDuration,
@@ -37,9 +35,7 @@ function useTimerHydrator() {
       isInitiated: true,
       repeating: resolvedRepeat,
     });
-    console.log(location.search);
     mergeSearchParams(resolvedDuration);
-    console.log(location.search);
   }, [hydrate]);
 }
 export default useTimerHydrator;

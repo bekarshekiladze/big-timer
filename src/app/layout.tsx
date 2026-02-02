@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import "./globals.css";
 import { Jost } from "next/font/google";
+import TitleUpdater from "@/components/TitleUpdater";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -8,7 +9,7 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Big Timer",
+  title: "Big Timer | fullscreen countdown timer",
   description:
     "Stay focused and manage your time effectively with our customizable timer",
 };
@@ -20,9 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={jost.className}>
-      <body>{children}</body>
+      <body>
+        <TitleUpdater />
+        {children}
+      </body>
     </html>
   );
 }
-
-
