@@ -14,6 +14,7 @@ export default function PlayerControls() {
   const pause = useTimerStore((s) => s.pause);
   const reset = useTimerStore((s) => s.reset);
   const targetTime = useTimerStore((s) => s.targetTime);
+  const duration = useTimerStore((s) => s.duration);
   const isRunning = useTimerStore((s) => s.isRunning);
   const remainingTime = useTimerStore((s) => s.remainingTime);
 
@@ -27,6 +28,7 @@ export default function PlayerControls() {
 
   return (
     <div className="buttons-container">
+      {/* started not finished */}
       {!isRunning && remainingTime > 0 && (
         <button
           onClick={() => {
@@ -35,10 +37,10 @@ export default function PlayerControls() {
           }}
           className="button primary-button"
         >
-          start
+          {duration === remainingTime ? "start" : "resume"}
         </button>
       )}
-      {(isRunning || remainingTime === 0) && (
+      {!isRunning && duration !== remainingTime && (
         <button
           onClick={() => {
             reset();
