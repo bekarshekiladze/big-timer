@@ -25,7 +25,9 @@
   --text-timer: calc(95vw / 6)
 }
 
-
+.cursor-hidden {
+  cursor: none
+}
 
 .center {
   max-width: var(--max-width);

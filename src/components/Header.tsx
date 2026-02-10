@@ -5,9 +5,11 @@ import { AiOutlineFullscreenExit, AiOutlineFullscreen } from "react-icons/ai";
 import { FaBlogger } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Switch from "./Switch";
+import useIdleIdentifier from "@/hooks/useIdleIdentifier";
 
 function Header() {
   const [fullScreen, setIsFullscreen] = useState(false);
+  const idle = useIdleIdentifier(10000);
 
   const toggleFullscreen = async () => {
     if (!document.fullscreenElement) {
@@ -26,7 +28,9 @@ function Header() {
     return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
   return (
-    <header className="absolute inset-0 flex justify-between items-center h-16 center">
+    <header
+      className={`${idle ? "opacity-0 pointer-events-none" : "opacity-100"} absolute inset-0 flex justify-between items-center h-16 center transition-opacity duration-300 ease-in-out`}
+    >
       <div className="flex gap-8 nav-items">
         <span className="flex items-center gap-2 text-bigtimer-yellow capitalize nav-item">
           <IoMdInformationCircleOutline />
