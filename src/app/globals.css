@@ -22,9 +22,34 @@
   --font-bigtimer: "BigTimer", "Jost", sans-serif;
 
 
-  --text-timer: calc(95vw / 6)
+  --text-timer: calc(95vw / 7)
 }
 
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: fit-content;
+  /* font-size: 40px; */
+  font-size: calc(95vw / 8);
+  font-family: system-ui, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #0000;
+  /* -webkit-text-stroke: 1px #ffcc00; */
+  -webkit-text-stroke: 1px #fff;
+  background:
+    linear-gradient(-60deg, #0000 45%, #B38F00 0 55%, #0000 0) 0/300% 100% no-repeat text;
+  animation: l3 2s linear infinite;
+}
+
+.loader:before {
+  content: "Loading";
+}
+
+@keyframes l3 {
+  0% {
+    background-position: 100%
+  }
+}
 
 
 .center {
